@@ -1,0 +1,31 @@
+FROM python:3.11-slim
+
+WORKDIR /app
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    gcc \
+    python3-dev \
+    git \
+    git-lfs \
+    && rm -rf /var/lib/apt/lists/* 
+
+# Copy requirements from pyproject.toml
+COPY pyproject.toml ./
+
+# Install dependencies
+RUN pip install --no-cache-dir --upgrade pip && \
+    pip install --no-cache-dir "boto3>=1.38.13" \
+    "click>=8.2.0" \
+    "git-lfs>=1.6" \
+    "python-dotenv>=1.1.0" \
+    "resemble-enhance>=0.0.1" \
+    "rq>=2.3.3" \
+    "sqlalchemy>=2.0.40" \
+    "torchaudio>=2.0.0"
+
+# Copy the application code
+COPY . .
+
+# Command to run the worker
+CMD ["python", "-m", "src.workers.enhance"] 

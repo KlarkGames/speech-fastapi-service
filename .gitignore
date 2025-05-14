@@ -3,3 +3,15 @@
 
 # Python
 **/__pycache__
+.pytest_cache
+
+# IDE
+.idea
+.vscode
+
+# Database
+*.db
+*.rdb
+
+# Secrets
+.env
